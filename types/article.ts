@@ -3,8 +3,12 @@ export interface IArticleDTO {
   description: string;
   content: string;
   tags: string[];
+  articleImage: string;
+}
+export interface IArticleToInsert extends IArticleDTO {
+  createdAt: string;
 }
 
-export interface IArticle extends IArticleDTO {
-  id: string;
+export interface IArticle extends IArticleToInsert {
+  _id: string;
 }

@@ -6,7 +6,7 @@ type TagsProps = {
 
 function Tags({ tags }: TagsProps) {
   return (
-    <ul>
+    <ul className="flex my-2 gap-x-2">
       {tags.map((tagTitle) => (
         <Tag key={tagTitle} isSelected={true} title={tagTitle} />
       ))}

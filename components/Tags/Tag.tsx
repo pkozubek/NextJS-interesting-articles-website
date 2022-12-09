@@ -11,7 +11,7 @@ function Tag({ title, isSelected, onClick }: TagProps) {
     <li
       onClick={onClick}
       className={classNames(
-        "p-2 rounded-lg text-black text-gray-900 hover:text-sky-600",
+        "p-2 rounded-lg text-gray-900 hover:text-sky-600 text-sm",
         {
           "bg-sky-600	text-white hover:text-slate-50": isSelected,
         }

@@ -16,3 +16,11 @@
 .btn:disabled {
   @apply opacity-70;
 }
+
+.article-content ol {
+  @apply list-decimal mt-2;
+}
+
+.article-content ul {
+  @apply list-disc mt-2;
+}

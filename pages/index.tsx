@@ -21,28 +21,35 @@ function Home({ recentArticles }: HomeProps) {
     <ArticleItem {...articleData} />
   ));
 
-  return <ul>{renderedArticles}</ul>;
+  return (
+    <div className="w-full ">
+      <ul>{renderedArticles}</ul>
+      <div className="w-full flex mt-4">
+        <Link
+          className="mx-auto p-4 border rounded hover:text-sky-600"
+          href="/articles"
+        >
+          Check more articles
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 export async function getStaticProps() {
-  return {
-    props: {
-      recentArticles: [],
-    },
-  };
-  // try {
-  //   const recentArticles = await fetch(
-  //     `${getEndpointUrl()}/articles/recent`
-  //   ).then((resp) => resp.json());
+  try {
+    const recentArticles = await fetch(
+      `${getEndpointUrl()}/articles/recent`
+    ).then((resp) => resp.json());
 
-  //   return {
-  //     props: {
-  //       recentArticles,
-  //     },
-  //   };
-  // } catch (e) {
-  //   return { notFound: true };
-  // }
+    return {
+      props: {
+        recentArticles,
+      },
+    };
+  } catch (e) {
+    return { notFound: true };
+  }
 }
 
 export default Home;

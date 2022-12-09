@@ -9,7 +9,7 @@ function Layout({ children }: LayoutProps) {
   return (
     <div>
       <Navigation />
-      <main>{children}</main>
+      <main className="container mx-auto mt-4">{children}</main>
       <footer></footer>
     </div>
   );

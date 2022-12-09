@@ -1,12 +1,16 @@
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useMemo, useRef, useState } from "react";
 
 import ArticleContent from "../../components/ArticleContent";
+import ImageSelector from "../../components/Form/ImageSelector";
 import StyledInput from "../../components/Form/StyledInput";
 import TagsSelector from "../../components/Tags/TagsSelector";
 import toast from "../../components/Toast";
+import { IArticleDTO } from "../../types/article";
 import { ToastType } from "../../types/toast";
 import { getEndpointUrl } from "../../utils/dataFetching";
+import { images } from "../../utils/images";
 
 const MarkdownEditor = dynamic(
   () => import("@uiw/react-markdown-editor").then((mod) => mod.default),
@@ -18,21 +22,26 @@ type AddArticleProps = {
 };
 
 function AddArticle({ tags }: AddArticleProps) {
+  const { push } = useRouter();
+
   const [markdownValue, setMarkdownValue] = useState("");
   const [selectedTags, setSelectedTags] = useState([tags[0]]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [selectedImageUrl, setSelectedImageUrl] = useState(images[0].src);
+  const [imageSelectorOpen, setImageSelectorOpen] = useState(false);
 
   const formRef = useRef<null | HTMLFormElement>(null);
 
   const onSubmit = (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
 
-    const bodyObj = {
+    const bodyObj: IArticleDTO = {
       title,
       description,
       content: markdownValue,
       tags: selectedTags,
+      articleImage: selectedImageUrl,
     };
 
     fetch(`${getEndpointUrl()}/articles`, {
@@ -45,6 +54,8 @@ function AddArticle({ tags }: AddArticleProps) {
           message: jsonResp.message,
           type: jsonResp.article ? ToastType.SUCCESS : ToastType.ERROR,
         });
+
+        push("/");
       })
       .catch(() => {
         toast({ message: "Something went wrong", type: ToastType.ERROR });
@@ -64,6 +75,7 @@ function AddArticle({ tags }: AddArticleProps) {
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) =>
     setTitle(e.target.value);
+
   const onDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) =>
     setDescription(e.target.value);
 
@@ -97,6 +109,12 @@ function AddArticle({ tags }: AddArticleProps) {
             label="Description"
             inputType="textarea"
             onChange={onDescriptionChange}
+          />
+          <ImageSelector
+            isOpen={imageSelectorOpen}
+            setOpen={setImageSelectorOpen}
+            selectedImageUrl={selectedImageUrl}
+            setSelectedImageUrl={setSelectedImageUrl}
           />
           <StyledInput label="Content" inputType="custom">
             <MarkdownEditor value={markdownValue} onChange={setMarkdownValue} />

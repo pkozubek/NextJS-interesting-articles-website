@@ -1,37 +1,41 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
-import { IArticle, IArticleDTO } from "../../../types/article";
-import { createConnection, isCorrectString } from "../../../utils/server";
+import { IArticle, IArticleToInsert } from "../../../types/article";
+import { createConnection } from "../../../utils/server";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const COLLECTION_NAME = "articles";
 
   switch (req.method) {
     case "POST":
-      const { title, description, content, tags } = req.body;
+      const { title, description, content, tags, articleImage } = JSON.parse(
+        req.body
+      );
 
       if (
-        [title, description, content].every((val) => !!val) &&
-        tags &&
-        tags.length > 0
+        [title, description, content, articleImage].some((val) => !val) ||
+        !tags ||
+        tags.length <= 0
       ) {
         return res.status(400).json({
           message: "Wrong body data",
         });
       }
 
-      const articleData: IArticleDTO = {
+      const articleData: IArticleToInsert = {
         title,
         description,
         content,
         tags,
+        createdAt: new Date().toISOString(),
+        articleImage,
       };
 
-      let mongoClient: MongoClient;
+      let postMongoClient: MongoClient;
       let insertedArticle: IArticle;
 
       try {
-        mongoClient = await createConnection();
+        postMongoClient = await createConnection();
       } catch {
         res.status(500).json({
           message: "DB connection error",
@@ -40,12 +44,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       }
 
       try {
-        const collection = mongoClient.db().collection(COLLECTION_NAME);
+        const collection = postMongoClient.db().collection(COLLECTION_NAME);
         const result = await collection.insertOne(articleData);
 
         insertedArticle = {
           ...articleData,
-          id: result.insertedId.toString(),
+          _id: result.insertedId.toString(),
         };
       } catch {
         res.status(500).json({
@@ -58,13 +62,35 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         message: "Article added successfully",
       });
     case "GET":
-      try {
-      } catch {}
+      const { page } = req.query;
+      const pageNumber = !page ? 0 : parseInt(page as string);
+      const pageSize = parseInt(process.env.PAGE_SIZE as string);
 
-      return res.status(201).json({
-        article: insertedArticle,
-        message: "Article added successfully",
-      });
+      let getMongoClient: MongoClient;
+      try {
+        getMongoClient = await createConnection();
+      } catch {
+        res.status(500).json({
+          message: "DB connection error",
+        });
+        return;
+      }
+
+      try {
+        const collection = getMongoClient.db().collection(COLLECTION_NAME);
+        const result = await collection
+          .find()
+          .skip(pageNumber * pageSize)
+          .limit(pageSize)
+          .toArray();
+
+        return res.status(200).json(result);
+      } catch {
+        res.status(500).json({
+          message: "Data not inserted, something went wrong",
+        });
+        return;
+      }
   }
 
   return res.status(404);
