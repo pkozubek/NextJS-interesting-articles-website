@@ -1,24 +1,12 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import { IArticleComment } from "../../types/article";
-import { ToastType } from "../../types/toast";
-import { getEndpointUrl } from "../../utils/dataFetching";
+import { fetcher } from "../../utils/dataFetching";
 import { formatDate } from "../../utils/date";
-import ToastMessage from "../Toast";
 
 type ArticleCommentsProps = {
   articleId: string;
 };
-
-const fetcher = (url: string) =>
-  fetch(`${getEndpointUrl()}/${url}`)
-    .then((res) => res.json())
-    .catch(() => {
-      ToastMessage({
-        message: "Something went wrong",
-        type: ToastType.ERROR,
-      });
-    });
 
 function ArticleComments({ articleId }: ArticleCommentsProps) {
   const { data: commentsData, isLoading } = useSWR<IArticleComment[]>(
