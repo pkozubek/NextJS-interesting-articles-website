@@ -13,10 +13,6 @@ module.exports = removeImports({
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "octodex.github.com",
-      },
-      {
-        protocol: "https",
         hostname: "unsplash.com",
       },
     ],

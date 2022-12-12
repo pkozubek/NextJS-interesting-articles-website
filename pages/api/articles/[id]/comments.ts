@@ -88,8 +88,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         })
         .toArray();
 
-      console.log("In get", result);
-
       res.status(200).json(result);
     } catch {
       return res.status(500).json({
