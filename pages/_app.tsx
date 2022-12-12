@@ -4,6 +4,7 @@ import Layout from "../components/Layout";
 import Head from "next/head";
 import { Fragment } from "react";
 import { ToastContainer } from "react-toastify";
+import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -16,9 +17,11 @@ export default function App({ Component, pageProps }: AppProps) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <SessionProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SessionProvider>
       <ToastContainer position="bottom-right" />
     </Fragment>
   );

@@ -10,7 +10,7 @@ interface StyledInputProps extends InputHTMLAttributes<HTMLProps> {
 }
 
 const SHARED_INPUT_PROPS =
-  "shadow border rounded focus:outline-none focus:shadow-outline w-full sm:w-full md:w-3/4 p-2";
+  "shadow border rounded focus:outline-none focus:shadow-outline w-full md:w-3/4 p-2";
 
 function StyledInput({
   label,

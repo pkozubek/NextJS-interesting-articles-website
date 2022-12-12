@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { useMemo } from "react";
 import useSWR from "swr";
 import { fetcher } from "../utils/dataFetching";
 
@@ -8,7 +7,7 @@ type PagingProps = {
 };
 
 function Paging({ currentPage }: PagingProps) {
-  const { data } = useSWR("articles/paging-info", fetcher);
+  const { data } = useSWR<any>("articles/paging-info", fetcher);
 
   if (!data) return null;
 

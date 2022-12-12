@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GrArticle } from "react-icons/gr";
+import AuthNav from "./AuthNav";
 
 function Navigation() {
   return (
@@ -19,6 +20,7 @@ function Navigation() {
             <li className="nav-item hover:text-sky-700">
               <Link href="/articles/add">Add article</Link>
             </li>
+            <AuthNav />
           </ul>
         </div>
       </nav>

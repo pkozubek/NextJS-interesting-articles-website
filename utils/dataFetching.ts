@@ -6,11 +6,4 @@ export function getEndpointUrl() {
 }
 
 export const fetcher = (url: string) =>
-  fetch(`${getEndpointUrl()}/${url}`)
-    .then((res) => res.json())
-    .catch(() => {
-      ToastMessage({
-        message: "Something went wrong",
-        type: ToastType.ERROR,
-      });
-    });
+  fetch(`${getEndpointUrl()}/${url}`).then((res) => res.json());
