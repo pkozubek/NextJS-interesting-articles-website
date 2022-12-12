@@ -1,6 +1,6 @@
 import { MongoClient, ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
-import { createConnection } from "../../../utils/server";
+import { createConnection } from "../../../../utils/server";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const COLLECTION_NAME = "articles";
@@ -17,6 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
       return;
     }
+
     try {
       const collection = mongoClient.db().collection(COLLECTION_NAME);
       const result = await collection.findOne({

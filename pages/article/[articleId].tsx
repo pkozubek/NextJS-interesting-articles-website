@@ -1,5 +1,9 @@
 import Image from "next/image";
-import ArticleContent from "../../components/ArticleContent";
+import { useRouter } from "next/router";
+import ArticleCommentForm from "../../components/Article/ArticleCommentForm";
+import ArticleComments from "../../components/Article/ArticleComments";
+import ArticleContent from "../../components/Article/ArticleContent";
+
 import Tags from "../../components/Tags";
 import { IArticle } from "../../types/article";
 import { getEndpointUrl } from "../../utils/dataFetching";
@@ -10,11 +14,12 @@ type ArticleDetailsProps = {
 };
 
 function ArticleDetails({ articleData }: ArticleDetailsProps) {
+  const { articleId } = useRouter().query;
   if (!articleData) return null;
 
   return (
     <div className="w-full">
-      <div className="flex w-full pb-8 border-b-2 border-sky-700 mb-4">
+      <div className="flex w-full pb-2 mb-4">
         <Image
           src={articleData.articleImage}
           alt="article-image"
@@ -27,7 +32,10 @@ function ArticleDetails({ articleData }: ArticleDetailsProps) {
           <time>{formatDate(articleData.createdAt)}</time>
         </div>
       </div>
+      <h3 className="border-b-2 border-sky-700 mb-8">Article content</h3>
       <ArticleContent content={articleData.content} />
+      <ArticleComments articleId={articleId as string} />
+      <ArticleCommentForm articleId={articleId as string} />
     </div>
   );
 }

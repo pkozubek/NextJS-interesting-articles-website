@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useMemo, useRef, useState } from "react";
+import ArticleContent from "../../components/Article/ArticleContent";
 
-import ArticleContent from "../../components/ArticleContent";
 import ImageSelector from "../../components/Form/ImageSelector";
 import StyledInput from "../../components/Form/StyledInput";
 import TagsSelector from "../../components/Tags/TagsSelector";

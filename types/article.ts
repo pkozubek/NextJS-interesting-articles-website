@@ -12,3 +12,14 @@ export interface IArticleToInsert extends IArticleDTO {
 export interface IArticle extends IArticleToInsert {
   _id: string;
 }
+
+export interface ArticleCommentBody {
+  comment: string;
+  name: string;
+}
+
+export interface IArticleComment extends ArticleCommentBody {
+  createdAt: string;
+  articleId: string;
+  _id: string;
+}
