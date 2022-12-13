@@ -5,6 +5,7 @@ import ArticleContent from "../../components/Article/ArticleContent";
 
 import ImageSelector from "../../components/Form/ImageSelector";
 import StyledInput from "../../components/Form/StyledInput";
+import RedirectGuard from "../../components/RedirectGuard";
 import TagsSelector from "../../components/Tags/TagsSelector";
 import toast from "../../components/Toast";
 import { IArticleDTO } from "../../types/article";
@@ -80,62 +81,67 @@ function AddArticle({ tags }: AddArticleProps) {
     setDescription(e.target.value);
 
   return (
-    <div>
-      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 mt-2">
-        <form
-          ref={formRef}
-          data-color-mode="light"
-          onSubmit={onSubmit}
-          className="shadow-md border w-full p-2"
-        >
-          <StyledInput
-            name="title"
-            type="text"
-            label="Title"
-            inputType="input"
-            value={title}
-            onChange={onTitleChange}
-          />
-          <StyledInput label="Tags" inputType="custom">
-            <TagsSelector
-              selectedTags={selectedTags}
-              setTags={setSelectedTags}
-              tags={tags}
+    <RedirectGuard redirectUrl="/auth">
+      <div>
+        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-4 mt-2">
+          <form
+            ref={formRef}
+            data-color-mode="light"
+            onSubmit={onSubmit}
+            className="shadow-md border w-full p-2"
+          >
+            <StyledInput
+              name="title"
+              type="text"
+              label="Title"
+              inputType="input"
+              value={title}
+              onChange={onTitleChange}
             />
-          </StyledInput>
-          <StyledInput
-            name="description"
-            type="textarea"
-            label="Description"
-            inputType="textarea"
-            onChange={onDescriptionChange}
-          />
-          <ImageSelector
-            isOpen={imageSelectorOpen}
-            setOpen={setImageSelectorOpen}
-            selectedImageUrl={selectedImageUrl}
-            setSelectedImageUrl={setSelectedImageUrl}
-          />
-          <StyledInput label="Content" inputType="custom">
-            <MarkdownEditor value={markdownValue} onChange={setMarkdownValue} />
-          </StyledInput>
-        </form>
-        <div className="shadow-md p-4 border">
-          <h2>Article Preview</h2>
-          <ArticleContent content={markdownValue} />
+            <StyledInput label="Tags" inputType="custom">
+              <TagsSelector
+                selectedTags={selectedTags}
+                setTags={setSelectedTags}
+                tags={tags}
+              />
+            </StyledInput>
+            <StyledInput
+              name="description"
+              type="textarea"
+              label="Description"
+              inputType="textarea"
+              onChange={onDescriptionChange}
+            />
+            <ImageSelector
+              isOpen={imageSelectorOpen}
+              setOpen={setImageSelectorOpen}
+              selectedImageUrl={selectedImageUrl}
+              setSelectedImageUrl={setSelectedImageUrl}
+            />
+            <StyledInput label="Content" inputType="custom">
+              <MarkdownEditor
+                value={markdownValue}
+                onChange={setMarkdownValue}
+              />
+            </StyledInput>
+          </form>
+          <div className="shadow-md p-4 border">
+            <h2>Article Preview</h2>
+            <ArticleContent content={markdownValue} />
+          </div>
+        </div>
+        <div className="w-full flex justify-end">
+          <button
+            onClick={onBtnClick}
+            type="submit"
+            className="mt-4 btn btn-submit mr-2"
+            disabled={isBtnDisabled}
+          >
+            Add article
+          </button>
         </div>
       </div>
-      <div className="w-full flex justify-end">
-        <button
-          onClick={onBtnClick}
-          type="submit"
-          className="mt-4 btn btn-submit mr-2"
-          disabled={isBtnDisabled}
-        >
-          Add article
-        </button>
-      </div>
-    </div>
+    </RedirectGuard>
   );
 }
 

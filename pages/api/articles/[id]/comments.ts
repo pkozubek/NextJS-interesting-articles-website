@@ -1,6 +1,8 @@
 import { MongoClient, ObjectId } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { unstable_getServerSession } from "next-auth";
 import { createConnection } from "../../../../utils/server";
+import { authOptions } from "../../auth/[...nextauth]";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const COLLECTION_NAME = "comments";
@@ -11,6 +13,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const { id: articleId } = req.query;
     const { comment, name } = JSON.parse(req.body);
+
+    const session = await unstable_getServerSession(req, res, authOptions);
+    if (!session) {
+      return res.status(401).json({
+        message: "Not authenticated",
+      });
+    }
 
     try {
       mongoClient = await createConnection();

@@ -17,7 +17,10 @@ function ArticleComments({ articleId }: ArticleCommentsProps) {
   const renderedMessages = useMemo(() => {
     if (commentsData && commentsData.length > 0) {
       const comments = commentsData.map((commentData) => (
-        <li className="border shadow rounded mb-2 p-4 w-4/5 mx-auto">
+        <li
+          key={commentData._id}
+          className="border shadow rounded mb-2 p-4 w-4/5 mx-auto"
+        >
           <div>{commentData.comment}</div>
           <div className="flex justify-between mt-4">
             <div className="text-gray-900">{commentData.name}</div>

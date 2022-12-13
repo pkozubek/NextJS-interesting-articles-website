@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
 import { IArticle, IArticleToInsert } from "../../../types/article";
 import { createConnection } from "../../../utils/server";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const COLLECTION_NAME = "articles";
@@ -11,6 +13,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       const { title, description, content, tags, articleImage } = JSON.parse(
         req.body
       );
+
+      const session = await unstable_getServerSession(req, res, authOptions);
+      if (!session) {
+        return res.status(401).json({
+          message: "Not authenticated",
+        });
+      }
 
       if (
         [title, description, content, articleImage].some((val) => !val) ||

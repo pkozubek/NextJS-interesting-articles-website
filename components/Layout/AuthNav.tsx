@@ -21,7 +21,7 @@ function AuthNav() {
 
   return (
     <li className="nav-item hover:text-sky-700">
-      <Link href="/authentication">Log in</Link>
+      <Link href="/auth">Log in</Link>
     </li>
   );
 }

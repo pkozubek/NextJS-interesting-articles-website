@@ -1,8 +1,13 @@
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { GrArticle } from "react-icons/gr";
 import AuthNav from "./AuthNav";
 
 function Navigation() {
+  const { status } = useSession();
+
+  const isUserLogged = status === "authenticated";
+
   return (
     <header>
       <nav className="navbar shadow-md py-2 bg-white relative flex w-full justify-between">
@@ -17,9 +22,11 @@ function Navigation() {
             <li className="nav-item hover:text-sky-700">
               <Link href="/articles">Articles</Link>
             </li>
-            <li className="nav-item hover:text-sky-700">
-              <Link href="/articles/add">Add article</Link>
-            </li>
+            {isUserLogged && (
+              <li className="nav-item hover:text-sky-700">
+                <Link href="/articles/add">Add article</Link>
+              </li>
+            )}
             <AuthNav />
           </ul>
         </div>

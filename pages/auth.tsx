@@ -1,8 +1,8 @@
-import { ChangeEvent, FormEvent, MouseEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
 import ToastMessage from "../components/Toast";
 import { ToastType } from "../types/toast";
 import { getEndpointUrl } from "../utils/dataFetching";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { isEmailValid } from "../utils/auth";
 import { useRouter } from "next/router";
 
@@ -11,6 +11,11 @@ function Authentication() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { push } = useRouter();
+  const { replace } = useRouter();
+  const { status } = useSession();
+
+  if (status === "loading") return null;
+  if (status === "authenticated") replace("/");
 
   const onEmailChange = (ev: ChangeEvent<HTMLInputElement>) => {
     setEmail(ev.target.value);
