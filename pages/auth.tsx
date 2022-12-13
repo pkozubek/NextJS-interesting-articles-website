@@ -138,16 +138,6 @@ function Authentication() {
               {isLogin ? "Switch to Sign up" : "Switch to Log in"}
             </button>
           </div>
-          <div className="flex items-center justify-end">
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-sky-700 hover:text-sky-800"
-              >
-                Forgot your password?
-              </a>
-            </div>
-          </div>
         </form>
       </div>
     </div>
